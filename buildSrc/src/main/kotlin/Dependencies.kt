@@ -21,6 +21,10 @@ object AppVersion {
 
 object AppModules {
     const val moduleApp = ":app"
+    const val moduleBase = ":base"
+    const val moduleNavigation = ":navigation"
+    const val moduleSearch = ":search"
+    const val moduleItemDetail = ":itemDetail"
 }
 
 object Libs {

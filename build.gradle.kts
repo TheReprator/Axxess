@@ -3,7 +3,6 @@ buildscript {
     repositories {
         google()
         jcenter()
-
     }
 
     dependencies {
@@ -11,7 +10,6 @@ buildscript {
         classpath(Libs.Kotlin.gradlePlugin)
         classpath(Libs.DaggerHilt.classPath)
         classpath(Libs.AndroidX.Navigation.navigationPlugin)
-
     }
 }
 
@@ -22,9 +20,7 @@ allprojects {
     }
 }
 
-/*tasks.register("clean").configure {
-    delete("build")
-}*/
+
 tasks.register("clean",Delete::class){
     delete(rootProject.buildDir)
 }

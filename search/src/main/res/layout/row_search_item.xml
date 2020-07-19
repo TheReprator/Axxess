@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--<data>
+
+        <variable
+            name="onBoardModal"
+            type="com.eventersapp.splash.onBoarding.OnBoardingModal" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:ignore="MissingDefaultResource">
+
+        <ImageView
+            android:id="@+id/rowOnboarding_img"
+            placeHolder="@{onBoardModal.imageType}"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            tools:src="@drawable/ic_circles_loader"
+            app:layout_constraintDimensionRatio="16:20"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/rowOnboarding_tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:fontFamily="@font/calibri"
+            android:text="@{onBoardModal.title}"
+            tools:text="Vikram Title"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rowOnboarding_img" />
+
+        <TextView
+            android:id="@+id/rowOnboarding_tv_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:fontFamily="@font/calibri"
+            android:gravity="center"
+            tools:text="Vikram Description"
+            android:text="@{onBoardModal.description}"
+            android:textAlignment="gravity"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rowOnboarding_tv_title" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>-->
+</layout>

@@ -70,13 +70,16 @@ androidExtensions {
 }
 
 dependencies {
+    implementation(project(AppModules.moduleBase))
+    implementation(project(AppModules.moduleNavigation))
+    implementation(project(AppModules.moduleSearch))
+    implementation(project(AppModules.moduleItemDetail))
+    implementation(project(AppModules.moduleItemDetail))
+
     implementation(Libs.AndroidX.appcompat)
 
-    implementation(Libs.AndroidX.browser)
     implementation(Libs.Google.materialWidget)
     implementation(Libs.AndroidX.annotation)
-    implementation(Libs.AndroidX.recyclerview)
-    implementation(Libs.AndroidX.cardView)
     implementation(Libs.AndroidX.coreKtx)
     implementation(Libs.AndroidX.constraintlayout)
 
@@ -90,9 +93,6 @@ dependencies {
 
     implementation(Libs.DaggerHilt.hilt)
     kapt(Libs.DaggerHilt.compiler)
-
-    implementation(Libs.DaggerHilt.viewModel)
-    kapt(Libs.DaggerHilt.androidXCompiler)
 
     implementation(Libs.Kotlin.stdlib)
     implementation(Libs.Coroutines.core)
