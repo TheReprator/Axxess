@@ -15,7 +15,7 @@ java {
 dependencies {
     implementation(Libs.AndroidX.annotation)
 
-    api(Libs.Kotlin.stdlib)
-    api(Libs.Coroutines.core)
+    implementation(Libs.Kotlin.stdlib)
+    implementation(Libs.Coroutines.core)
 }
 

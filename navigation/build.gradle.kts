@@ -19,6 +19,8 @@ android {
     compileSdkVersion(AndroidSdk.compile)
 
     defaultConfig {
+        minSdkVersion(AndroidSdk.min)
+
         testInstrumentationRunner = Libs.TestDependencies.testRunner
 
         consumerProguardFiles(
@@ -52,6 +54,8 @@ android {
 }
 
 dependencies {
+    implementation(project(AppModules.moduleBaseAndroid))
+
     implementation(Libs.AndroidX.appcompat)
     implementation(Libs.AndroidX.coreKtx)
 

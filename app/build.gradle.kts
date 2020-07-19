@@ -71,9 +71,9 @@ androidExtensions {
 
 dependencies {
     implementation(project(AppModules.moduleBase))
+    implementation(project(AppModules.moduleBaseAndroid))
     implementation(project(AppModules.moduleNavigation))
     implementation(project(AppModules.moduleSearch))
-    implementation(project(AppModules.moduleItemDetail))
     implementation(project(AppModules.moduleItemDetail))
 
     implementation(Libs.AndroidX.appcompat)
@@ -91,9 +91,6 @@ dependencies {
 
     implementation(Libs.AndroidX.multidex)
 
-    implementation(Libs.DaggerHilt.hilt)
-    kapt(Libs.DaggerHilt.compiler)
-
     implementation(Libs.Kotlin.stdlib)
     implementation(Libs.Coroutines.core)
 
@@ -106,6 +103,9 @@ dependencies {
     implementation(Libs.AndroidX.Room.runtime)
     implementation(Libs.AndroidX.Room.ktx)
     kapt(Libs.AndroidX.Room.compiler)
+
+    implementation(Libs.DaggerHilt.hilt)
+    kapt(Libs.DaggerHilt.compiler)
 
     testImplementation(Libs.TestDependencies.junit)
     testImplementation(Libs.TestDependencies.jupiterApi)

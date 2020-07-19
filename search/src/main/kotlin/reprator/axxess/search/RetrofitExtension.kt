@@ -1,13 +1,13 @@
 package reprator.axxess.search
 
-
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import kotlinx.coroutines.delay
+import reprator.axxess.base.util.useCases.AxxessResult
+import reprator.axxess.base.util.useCases.ErrorResult
+import reprator.axxess.base.util.useCases.Success
 import retrofit2.Call
 import retrofit2.HttpException
 import retrofit2.Response
 import java.io.IOException
-import java.net.HttpURLConnection
 
 fun <T> Response<T>.bodyOrThrow(): T {
     if (!isSuccessful) throw HttpException(this)
@@ -69,42 +69,29 @@ fun defaultShouldRetry(exception: Exception) = when (exception) {
 }
 
 fun <T> Response<T>.isFromNetwork(): Boolean {
-    return raw().cacheResponse == null
+    return raw().cacheResponse() == null
 }
 
 fun <T> Response<T>.isFromCache(): Boolean {
-    return raw().cacheResponse != null
+    return raw().cacheResponse() != null
 }
 
 @Suppress("REDUNDANT_INLINE_SUSPEND_FUNCTION_TYPE")
-suspend fun <T> Response<T>.toResultUnit(): EventerResult<Unit> = toResult { Unit }
+suspend fun <T> Response<T>.toResultUnit(): AxxessResult<Unit> = toResult { Unit }
 
 @Suppress("REDUNDANT_INLINE_SUSPEND_FUNCTION_TYPE")
-suspend fun <T> Response<T>.toResult(): EventerResult<T> = toResult { it }
+suspend fun <T> Response<T>.toResult(): AxxessResult<T> = toResult { it }
 
 @Suppress("REDUNDANT_INLINE_SUSPEND_FUNCTION_TYPE")
-suspend fun <T, E> Response<T>.toResult(mapper: suspend (T) -> E): EventerResult<E> {
-    if (isSuccessful) {
-        return Success(
+suspend fun <T, E> Response<T>.toResult(mapper: suspend (T) -> E): AxxessResult<E> {
+    return if (isSuccessful) {
+        Success(
             data = mapper(bodyOrThrow()),
             responseModified = isFromNetwork()
         )
     } else {
-        val code = code()
-        val retrofitErrors = when {
-            (code == HttpURLConnection.HTTP_UNAUTHORIZED) ||
-                    (code >= HttpURLConnection.HTTP_BAD_REQUEST && code < HttpURLConnection.HTTP_INTERNAL_ERROR) ||
-                    (code >= HttpURLConnection.HTTP_INTERNAL_ERROR && code < 600) ->
-                jacksonObjectMapper().readValue(
-                    errorBody()!!.string(),
-                    RetrofitErrors::class.java
-                )
-            else ->
-                RetrofitErrors.UNKNOWN_ERROR
-        }
-        return ErrorResult(
-            message = retrofitErrors.message,
-            retrofitErrors = retrofitErrors
+        ErrorResult(
+            message = errorBody()!!.string()
         )
     }
 }

@@ -1,7 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/axxess_nav_graph"
+    app:startDestination="@id/navigation_search"
+    tools:ignore="UnusedNavigation">
 
+    <fragment
+        android:id="@+id/navigation_search"
+        android:name="reprator.axxess.search.SearchFragment"
+        android:label="SplashFragment"
+        tools:layout="@layout/fragment_search">
+
+        <action
+            android:id="@+id/action_navigation_search_to_navigation_itemDetail"
+            app:destination="@id/navigation_itemDetail" />
+        <argument
+            android:name="selectedItem"
+            app:argType="reprator.axxess.base_android.SearchItem" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_itemDetail"
+        android:name="reprator.axxess.itemDetail.ItemDetailFragment"
+        android:label="SplashFragment"
+        tools:layout="@layout/fragment_item_detail">
+        <argument
+            android:name="selectedItem"
+            app:argType="reprator.axxess.base_android.SearchModal" />
+    </fragment>
 
 </navigation>

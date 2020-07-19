@@ -7,7 +7,7 @@ object AndroidSdk {
 }
 
 object AppConstant {
-    const val applicationPackage = "reprator.axxessplayground"
+    const val applicationPackage = "reprator.axxess"
     const val name = "Axxess"
     const val host = "https://api.imgur.com/3/"
     const val hostConstant = "HOST"
@@ -22,6 +22,7 @@ object AppVersion {
 object AppModules {
     const val moduleApp = ":app"
     const val moduleBase = ":base"
+    const val moduleBaseAndroid = ":base-android"
     const val moduleNavigation = ":navigation"
     const val moduleSearch = ":search"
     const val moduleItemDetail = ":itemDetail"
@@ -215,7 +216,6 @@ object Libs {
         const val daggerCompiler = "com.squareup.inject:assisted-inject-processor-dagger2:$version"
     }
 
-    //https://github.com/satoshun-android-example/ViewModelSavedState/blob/master/app/build.gradle
     object TestDependencies {
         object Mockk {
             private const val version = "1.9.3"

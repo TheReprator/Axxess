@@ -4,12 +4,15 @@ plugins {
     kotlin(Libs.Plugins.kotlinAndroidExtensions)
     kotlin(Libs.Plugins.kotlinKapt)
     id(Libs.Plugins.kotlinNavigation)
+    id(Libs.Plugins.kaptDagger)
 }
 
 android {
     compileSdkVersion(AndroidSdk.compile)
 
     defaultConfig {
+        minSdkVersion(AndroidSdk.min)
+
         testInstrumentationRunner = Libs.TestDependencies.testRunner
 
         consumerProguardFiles(
@@ -65,6 +68,8 @@ kapt {
 
 dependencies {
     implementation(project(AppModules.moduleNavigation))
+    implementation(project(AppModules.moduleBase))
+    implementation(project(AppModules.moduleBaseAndroid))
 
     implementation(Libs.Google.materialWidget)
     implementation(Libs.AndroidX.annotation)
@@ -85,6 +90,9 @@ dependencies {
 
     implementation(Libs.DaggerHilt.hilt)
     kapt(Libs.DaggerHilt.compiler)
+
+    implementation(Libs.DaggerHilt.viewModel)
+    kapt(Libs.DaggerHilt.androidXCompiler)
 
     testImplementation(Libs.TestDependencies.junit)
     testImplementation(Libs.TestDependencies.jupiterApi)
