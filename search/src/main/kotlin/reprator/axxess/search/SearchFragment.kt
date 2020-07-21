@@ -9,10 +9,12 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.GridLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
+import reprator.axxess.base_android.SearchNavigator
 import reprator.axxess.base_android.extensions.hideSoftInput
 import reprator.axxess.base_android.extensions.snackBar
 import reprator.axxess.base_android.util.event.EventObserver
 import reprator.axxess.search.databinding.FragmentSearchBinding
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class SearchFragment : Fragment(R.layout.fragment_search), SearchView.OnQueryTextListener {
@@ -20,6 +22,9 @@ class SearchFragment : Fragment(R.layout.fragment_search), SearchView.OnQueryTex
     private lateinit var searchAdapter: SearchAdapter
 
     private val viewModel: SearchViewModel by viewModels()
+
+    @Inject
+    lateinit var searchNavigator: SearchNavigator
 
     override fun onDestroyView() {
         _binding = null
@@ -79,5 +84,10 @@ class SearchFragment : Fragment(R.layout.fragment_search), SearchView.OnQueryTex
             hideSoftInput()
             searchAdapter.submitList(it.toList())
         }
+
+        viewModel.itemSelected.observe(viewLifecycleOwner, EventObserver{
+            hideSoftInput()
+            searchNavigator.navigateToItemDetail(it)
+        })
     }
 }

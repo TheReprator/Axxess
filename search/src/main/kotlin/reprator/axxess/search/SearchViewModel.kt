@@ -17,7 +17,6 @@ import reprator.axxess.search.domain.usecase.SearchUseCase
 private const val DEBOUNCE_TIME = 250L
 
 class SearchViewModel @ViewModelInject constructor(
-    private val searchNavigator: SearchNavigator,
     private val searchUseCase: SearchUseCase,
     private val coroutineDispatchers: AppCoroutineDispatchers,
     @Assisted private val savedStateHandle: SavedStateHandle
@@ -37,13 +36,17 @@ class SearchViewModel @ViewModelInject constructor(
     val isError: LiveData<Event<String>>
         get() = _isError
 
+    private val _itemSelected: MutableLiveData<Event<SearchModal>> = MutableLiveData()
+    val itemSelected: LiveData<Event<SearchModal>>
+        get() = _itemSelected
+
     fun setSearchQuery(query: String) {
         searchQuery.value = query
         savedStateHandle.set(KEY_SEARCH, query)
     }
 
     fun positionClicked(positionClicked: Int) {
-        searchNavigator.navigateToItemDetail(searchItemList.value!![positionClicked])
+        _itemSelected.value = Event(searchItemList.value!![positionClicked])
     }
 
     init {
@@ -77,6 +80,14 @@ class SearchViewModel @ViewModelInject constructor(
                     job.join()
                 }
         }
+
+        checkForKilledState()
+    }
+
+    private fun checkForKilledState(){
+         savedStateHandle.get<String>(KEY_SEARCH)?.let {
+             setSearchQuery(it)
+         }
     }
 
     companion object {

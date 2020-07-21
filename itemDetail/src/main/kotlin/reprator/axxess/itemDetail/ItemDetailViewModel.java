@@ -36,6 +36,7 @@ public class ItemDetailViewModel extends ViewModel {
         this.savedStateHandle = savedStateHandle;
         this.commentRepository = commentRepository;
 
+        this.savedStateHandle = savedStateHandle;
         searchModal = savedStateHandle.get("selectedItem");
 
         commentModalList = Transformations.

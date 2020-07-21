@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -28,29 +28,33 @@
             android:layout_height="wrap_content"
             android:fitsSystemWindows="true"
             android:minHeight="?attr/actionBarSize"
+            app:contentInsetLeft="0dp"
+            app:contentInsetStart="0dp"
+            app:contentInsetStartWithNavigation="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:title="@{title}"
-            app:navigationIcon="?attr/homeAsUpIndicator" />
+            app:navigationIcon="?attr/homeAsUpIndicator"
+            app:title="@{title}" />
 
         <ImageView
             android:id="@+id/itemDetail_image"
             imageUrl="@{imageUrl}"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintTop_toBottomOf="@id/itemDetail_toolbar"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintDimensionRatio="H,16:9"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintDimensionRatio="H,16:9" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/itemDetail_toolbar" />
 
-        <Button android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <Button
             android:id="@+id/itemDetail_submit"
-            android:text="@string/itemDetail_submit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:onClick="@{() -> viewModal.insertComment()}"
-            app:layout_constraintTop_toBottomOf="@+id/itemDetail_image"
-            app:layout_constraintEnd_toEndOf="parent" />
+            android:text="@string/itemDetail_submit"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/itemDetail_image" />
 
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/itemDetail_barrier"
@@ -59,24 +63,25 @@
             app:barrierDirection="start"
             app:constraint_referenced_ids="itemDetail_submit" />
 
-        <EditText android:layout_width="0dp"
+        <EditText
             android:id="@+id/itemDetail_comment"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:minHeight="@dimen/itemDetail_editText_minHeight"
             android:inputType="textMultiLine"
+            android:minHeight="@dimen/itemDetail_editText_minHeight"
             android:text="@={viewModal.comment}"
+            app:layout_constraintEnd_toStartOf="@id/itemDetail_barrier"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/itemDetail_image"
-            app:layout_constraintEnd_toStartOf="@id/itemDetail_barrier"/>
+            app:layout_constraintTop_toBottomOf="@+id/itemDetail_image" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/itemDetail_recycler"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:clipToPadding="false"
-           app:layout_constraintTop_toBottomOf="@+id/itemDetail_comment"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/itemDetail_comment" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
