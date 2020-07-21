@@ -224,6 +224,7 @@ object Libs {
         }
 
         const val assertj = "org.assertj:assertj-core:3.13.2"
+        const val truth = "com.google.truth:truth:1.0.1"
         const val jupiterApi = "org.junit.jupiter:junit-jupiter-api:5.5.2"
         const val jupiterEngine = "org.junit.jupiter:junit-jupiter-engine:5.5.2"
         const val junit = "junit:junit:4.12"

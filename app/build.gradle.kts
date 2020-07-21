@@ -110,9 +110,8 @@ dependencies {
     implementation(Libs.DaggerHilt.viewModel)
     kapt(Libs.DaggerHilt.androidXCompiler)
 
-    testImplementation(Libs.TestDependencies.junit)
-    testImplementation(Libs.TestDependencies.jupiterApi)
     testImplementation(Libs.TestDependencies.Mockk.unitTest)
+    testImplementation(Libs.TestDependencies.truth)
 
     testImplementation(Libs.DaggerHilt.instrumentation)
     androidTestImplementation(Libs.DaggerHilt.instrumentation)

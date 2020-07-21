@@ -99,9 +99,7 @@ dependencies {
     implementation(Libs.AndroidX.Room.runtime)
     kapt(Libs.AndroidX.Room.compiler)
 
-    testImplementation(Libs.TestDependencies.junit)
-    testImplementation(Libs.TestDependencies.jupiterApi)
-    testImplementation(Libs.TestDependencies.Mockk.unitTest)
+    testImplementation(Libs.TestDependencies.truth)
 
     testImplementation(Libs.DaggerHilt.instrumentation)
     androidTestImplementation(Libs.DaggerHilt.instrumentation)
