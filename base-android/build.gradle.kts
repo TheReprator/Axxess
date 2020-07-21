@@ -55,4 +55,5 @@ dependencies {
     implementation(Libs.AndroidX.coreKtx)
 
     implementation(Libs.Coil.coil)
+    implementation(Libs.Google.materialWidget)
 }

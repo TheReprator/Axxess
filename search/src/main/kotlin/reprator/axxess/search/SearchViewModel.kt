@@ -1,11 +1,11 @@
 package reprator.axxess.search
 
+import android.util.Log
 import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import reprator.axxess.base.extensions.mainBlock
 import reprator.axxess.base.util.AppCoroutineDispatchers
 import reprator.axxess.base.util.useCases.ErrorResult
 import reprator.axxess.base.util.useCases.Success
@@ -13,6 +13,8 @@ import reprator.axxess.base_android.SearchModal
 import reprator.axxess.base_android.SearchNavigator
 import reprator.axxess.base_android.util.event.Event
 import reprator.axxess.search.domain.usecase.SearchUseCase
+
+private const val DEBOUNCE_TIME = 250L
 
 class SearchViewModel @ViewModelInject constructor(
     private val searchNavigator: SearchNavigator,
@@ -48,8 +50,12 @@ class SearchViewModel @ViewModelInject constructor(
 
     init {
         viewModelScope.launch {
-            searchQuery.debounce(300)
+            searchQuery.debounce(DEBOUNCE_TIME)
                 .collectLatest { query ->
+
+                    if (query.isBlank())
+                        return@collectLatest
+
                     val job = launch {
                         _showLoader.value = true
                         searchUseCase(query)
@@ -57,17 +63,13 @@ class SearchViewModel @ViewModelInject constructor(
                             .catch {
                                 _isError.value = Event(it.message!!)
                             }
-                            .flowOn(coroutineDispatchers.main)
                             .collectLatest {
                                 when (it) {
                                     is Success ->
-                                        mainBlock(coroutineDispatchers) {
-                                            _searchItemList.value = it.data
-                                        }
-                                    is ErrorResult ->
-                                        mainBlock(coroutineDispatchers) {
-                                            _isError.value = Event(it.message!!)
-                                        }
+                                        _searchItemList.value = it.data
+                                    is ErrorResult -> {
+                                        _isError.value = Event(it.message!!)
+                                    }
                                 }
                             }
                     }

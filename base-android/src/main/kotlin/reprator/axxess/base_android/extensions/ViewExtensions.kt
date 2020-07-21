@@ -4,9 +4,8 @@ import android.view.View
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
-import com.eventersapp.base_android.util.isAndroidJOrLater
 import com.google.android.material.snackbar.Snackbar
-
+import reprator.axxess.base_android.util.isAndroidJOrLater
 
 fun View.drawableFromViewContext(@DrawableRes resourceId: Int) = ContextCompat.getDrawable(context, resourceId)
 

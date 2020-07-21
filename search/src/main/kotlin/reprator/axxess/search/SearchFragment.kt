@@ -1,6 +1,7 @@
 package reprator.axxess.search
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
@@ -9,11 +10,12 @@ import androidx.lifecycle.observe
 import androidx.recyclerview.widget.GridLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import reprator.axxess.base_android.extensions.hideSoftInput
+import reprator.axxess.base_android.extensions.snackBar
 import reprator.axxess.base_android.util.event.EventObserver
 import reprator.axxess.search.databinding.FragmentSearchBinding
 
 @AndroidEntryPoint
-class SearchFragment : Fragment(), SearchView.OnQueryTextListener {
+class SearchFragment : Fragment(R.layout.fragment_search), SearchView.OnQueryTextListener {
 
     private lateinit var searchAdapter: SearchAdapter
 
@@ -48,6 +50,7 @@ class SearchFragment : Fragment(), SearchView.OnQueryTextListener {
 
         _binding = FragmentSearchBinding.bind(view).also {
             it.state = viewModel
+            it.lifecycleOwner =viewLifecycleOwner
         }
 
         initializeObserver()
@@ -74,12 +77,8 @@ class SearchFragment : Fragment(), SearchView.OnQueryTextListener {
     private fun initializeObserver() {
 
         viewModel.isError.observe(viewLifecycleOwner, EventObserver {
-
+            binding.searchRecycler.snackBar(it)
         })
-
-        viewModel.showLoader.observe(viewLifecycleOwner) {
-
-        }
 
         viewModel.searchItemList.observe(viewLifecycleOwner) {
             searchAdapter.submitList(it.toList())

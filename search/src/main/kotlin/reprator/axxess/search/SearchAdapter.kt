@@ -28,11 +28,11 @@ class VHSearch(private val binding: RowSearchItemBinding, itemClickListener: (In
     init {
         itemView.setOnClickListener {
             if (bindingAdapterPosition > -1)
-                itemClickListener(adapterPosition)
+                itemClickListener(bindingAdapterPosition)
         }
     }
 
     fun bind(item: SearchModal) {
-
+        binding.imageUrl = item.imageUrl
     }
 }

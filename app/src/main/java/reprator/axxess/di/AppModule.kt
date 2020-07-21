@@ -25,11 +25,6 @@ import java.util.concurrent.Executors
 class AppModule {
 
     @Provides
-    fun provideAppNavigator(@ActivityContext context: Context): AppNavigator {
-        return AxxessAppNavigator(context)
-    }
-
-    @Provides
     fun provideLifeCycle(): Lifecycle {
         return ProcessLifecycleOwner.get().lifecycle
     }
@@ -37,11 +32,6 @@ class AppModule {
     @Provides
     fun provideLifetimeScope(lifecycle: Lifecycle): CoroutineScope {
         return lifecycle.coroutineScope
-    }
-
-    @Provides
-    fun connectivityChecker(context: Context, lifecycle: Lifecycle): ConnectionDetector {
-        return InternetChecker(context, lifecycle)
     }
 
     @Provides

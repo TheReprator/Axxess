@@ -107,6 +107,9 @@ dependencies {
     implementation(Libs.DaggerHilt.hilt)
     kapt(Libs.DaggerHilt.compiler)
 
+    implementation(Libs.DaggerHilt.viewModel)
+    kapt(Libs.DaggerHilt.androidXCompiler)
+
     testImplementation(Libs.TestDependencies.junit)
     testImplementation(Libs.TestDependencies.jupiterApi)
     testImplementation(Libs.TestDependencies.Mockk.unitTest)

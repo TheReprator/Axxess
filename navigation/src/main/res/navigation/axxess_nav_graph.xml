@@ -17,7 +17,7 @@
             app:destination="@id/navigation_itemDetail" />
         <argument
             android:name="selectedItem"
-            app:argType="reprator.axxess.base_android.SearchItem" />
+            app:argType="reprator.axxess.base_android.SearchModal" />
     </fragment>
 
     <fragment
@@ -25,6 +25,7 @@
         android:name="reprator.axxess.itemDetail.ItemDetailFragment"
         android:label="SplashFragment"
         tools:layout="@layout/fragment_item_detail">
+
         <argument
             android:name="selectedItem"
             app:argType="reprator.axxess.base_android.SearchModal" />

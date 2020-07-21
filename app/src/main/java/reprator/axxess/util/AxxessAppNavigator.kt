@@ -8,7 +8,6 @@ import androidx.navigation.findNavController
 import dagger.hilt.android.qualifiers.ActivityContext
 import reprator.axxess.R
 import reprator.axxess.base_android.AppNavigator
-import reprator.axxess.base_android.SearchItem
 import reprator.axxess.base_android.SearchModal
 import reprator.axxess.search.SearchFragmentDirections
 import javax.inject.Inject

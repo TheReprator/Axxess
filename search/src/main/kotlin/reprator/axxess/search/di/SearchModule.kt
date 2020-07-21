@@ -3,6 +3,7 @@ package reprator.axxess.search.di
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
 import dagger.hilt.android.components.FragmentComponent
 import reprator.axxess.base.util.ConnectionDetector
 import reprator.axxess.base_android.AppNavigator
@@ -14,8 +15,9 @@ import reprator.axxess.search.datasource.remote.SearchApiService
 import reprator.axxess.search.datasource.remote.modal.remoteMapper.SearchMapper
 import reprator.axxess.search.domain.repository.SearchRepository
 import reprator.axxess.search.domain.usecase.SearchUseCase
+import retrofit2.Retrofit
 
-@InstallIn(FragmentComponent::class)
+@InstallIn(ActivityComponent::class)
 @Module
 class SearchModule {
 
@@ -49,5 +51,13 @@ class SearchModule {
         timeLineRepository: SearchRepository
     ): SearchUseCase {
         return SearchUseCase(timeLineRepository)
+    }
+
+    @Provides
+    fun provideSearchApiService(
+        retrofit: Retrofit
+    ): SearchApiService {
+        return retrofit
+            .create(SearchApiService::class.java)
     }
 }

@@ -1,6 +1,7 @@
 package reprator.axxess.base_android
 
 import android.graphics.drawable.Drawable
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import androidx.annotation.DrawableRes
