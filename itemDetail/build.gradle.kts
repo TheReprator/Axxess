@@ -94,6 +94,11 @@ dependencies {
     implementation(Libs.DaggerHilt.viewModel)
     kapt(Libs.DaggerHilt.androidXCompiler)
 
+    implementation(Libs.AndroidX.Navigation.fragmentKtx)
+
+    implementation(Libs.AndroidX.Room.runtime)
+    kapt(Libs.AndroidX.Room.compiler)
+
     testImplementation(Libs.TestDependencies.junit)
     testImplementation(Libs.TestDependencies.jupiterApi)
     testImplementation(Libs.TestDependencies.Mockk.unitTest)

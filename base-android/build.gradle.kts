@@ -56,4 +56,6 @@ dependencies {
 
     implementation(Libs.Coil.coil)
     implementation(Libs.Google.materialWidget)
+
+    implementation(Libs.AndroidX.recyclerview)
 }

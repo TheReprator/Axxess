@@ -8,6 +8,7 @@ import androidx.annotation.DrawableRes
 import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import coil.api.load
+import coil.size.Scale
 import reprator.axxess.base_android.extensions.drawableFromViewContext
 
 @BindingAdapter("visible")
@@ -39,10 +40,14 @@ fun imageLoad(
         else
             "$imageUrl?$dimension"
 
+
         view.load(url) {
             val placeHolderDrawable =
                 placeHolder ?: view.drawableFromViewContext(R.drawable.ic_circles_loader)
             placeholder(placeHolderDrawable)
+
+            error(placeHolderDrawable)
+            scale(Scale.FILL)
         }
     }
 }

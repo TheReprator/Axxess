@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="itemDetail_editText_minHeight">60dp</dimen>
+</resources>

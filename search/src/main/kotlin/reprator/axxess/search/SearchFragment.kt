@@ -40,11 +40,6 @@ class SearchFragment : Fragment(R.layout.fragment_search), SearchView.OnQueryTex
         return true
     }
 
-    override fun onStop() {
-        viewModel.clearQuery()
-        super.onStop()
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -81,6 +76,7 @@ class SearchFragment : Fragment(R.layout.fragment_search), SearchView.OnQueryTex
         })
 
         viewModel.searchItemList.observe(viewLifecycleOwner) {
+            hideSoftInput()
             searchAdapter.submitList(it.toList())
         }
     }

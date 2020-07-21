@@ -42,8 +42,6 @@ class SearchViewModel @ViewModelInject constructor(
         savedStateHandle.set(KEY_SEARCH, query)
     }
 
-    fun clearQuery() = setSearchQuery("")
-
     fun positionClicked(positionClicked: Int) {
         searchNavigator.navigateToItemDetail(searchItemList.value!![positionClicked])
     }

@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import reprator.axxess.base_android.SearchModal
+import reprator.axxess.base_android.util.GeneralDiffUtil
 import reprator.axxess.search.databinding.RowSearchItemBinding
 import javax.inject.Inject
 

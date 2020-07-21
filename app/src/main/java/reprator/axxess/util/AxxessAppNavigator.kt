@@ -25,25 +25,12 @@ class AxxessAppNavigator @Inject constructor(
         getNavController().navigate(navDirections)
     }
 
-    private fun directions(@IdRes intResource: Int) {
-        getNavController().navigate(intResource)
-    }
-
-
-    /*override fun showLoader() {
-        directions(R.id.navigation_connect_dialogFragment)
-    }
-
-    override fun hideLoader() {
-        getNavController().popBackStack()
-    }
-
-    override fun moveToBackScreen() {
-        getNavController().navigateUp()
-    }*/
-
     override fun navigateToItemDetail(searchItem: SearchModal) {
         val action = SearchFragmentDirections.actionNavigationSearchToNavigationItemDetail(searchItem)
         directions(action)
+    }
+
+    override fun navigateToBack() {
+        getNavController().navigateUp()
     }
 }

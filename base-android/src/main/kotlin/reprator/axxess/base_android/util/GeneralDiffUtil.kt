@@ -1,4 +1,4 @@
-package reprator.axxess.search
+package reprator.axxess.base_android.util
 
 import androidx.recyclerview.widget.DiffUtil
 
