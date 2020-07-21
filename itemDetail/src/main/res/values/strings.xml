@@ -1,3 +1,4 @@
 <resources>
     <string name="itemDetail_submit">Submit</string>
+    <string name="itemDetail_imageRatio">H,16:9</string>
 </resources>
