@@ -105,6 +105,7 @@ object Libs {
         private const val version = "1.3.8"
         const val core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$version"
         const val android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$version"
+        const val coroutineTest = "org.jetbrains.kotlinx:kotlinx-coroutines-test:$version"
     }
 
     object AndroidX {
@@ -218,7 +219,7 @@ object Libs {
 
     object TestDependencies {
         object Mockk {
-            private const val version = "1.9.3"
+            private const val version = "1.10.0"
             const val unitTest = "io.mockk:mockk:$version"
             const val instrumentedTest = "io.mockk:mockk-android:$version"
         }
@@ -230,5 +231,7 @@ object Libs {
         const val junit = "junit:junit:4.12"
         const val junitInstrumented = "androidx.test.ext:junit:1.1.1"
         const val testRunner = "androidx.test.runner.AndroidJUnitRunner"
+        const val archCore = "androidx.arch.core:core-testing:2.1.0"
+
     }
 }

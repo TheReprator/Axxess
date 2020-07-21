@@ -99,7 +99,9 @@ dependencies {
     implementation(Libs.AndroidX.Room.runtime)
     kapt(Libs.AndroidX.Room.compiler)
 
+    implementation(Libs.Coroutines.coroutineTest)
     testImplementation(Libs.TestDependencies.truth)
+    testImplementation(Libs.TestDependencies.archCore)
 
     testImplementation(Libs.DaggerHilt.instrumentation)
     androidTestImplementation(Libs.DaggerHilt.instrumentation)

@@ -80,6 +80,7 @@ dependencies {
 
     implementation(Libs.Kotlin.stdlib)
     implementation(Libs.Coroutines.core)
+    implementation(Libs.Coroutines.coroutineTest)
 
     implementation(Libs.AndroidX.Lifecycle.livedata)
 
@@ -104,4 +105,5 @@ dependencies {
 
     testImplementation(Libs.TestDependencies.Mockk.unitTest)
     testImplementation(Libs.TestDependencies.truth)
+    testImplementation(Libs.TestDependencies.archCore)
 }
