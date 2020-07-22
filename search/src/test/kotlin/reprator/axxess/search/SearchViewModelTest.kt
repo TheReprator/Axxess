@@ -3,7 +3,9 @@ package reprator.axxess.search
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.SavedStateHandle
 import com.google.common.truth.Truth
-import io.mockk.*
+import io.mockk.MockKAnnotations
+import io.mockk.clearAllMocks
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.delay
@@ -38,13 +40,14 @@ class SearchViewModelTest {
 
     private val QUERY = "apple"
 
-    private val EMPTY_QUERY: String ?= null
+    private val EMPTY_QUERY: String = ""
 
     @Before
     fun setup() {
         MockKAnnotations.init(this)
 
-        every { savedStateHandle.get<String>(any())} returns EMPTY_QUERY
+        every { savedStateHandle.get<String>(any()) } returns EMPTY_QUERY
+        every { savedStateHandle.set(any(), any<String>()) } returns Unit
 
         searchViewModel = SearchViewModel(searchUseCase, coroutineDispatchers, savedStateHandle)
     }
