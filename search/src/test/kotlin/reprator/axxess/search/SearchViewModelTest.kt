@@ -1,36 +1,36 @@
 package reprator.axxess.search
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.Observer
 import androidx.lifecycle.SavedStateHandle
 import com.google.common.truth.Truth
-import io.mockk.MockKAnnotations
-import io.mockk.clearAllMocks
-import io.mockk.every
+import io.mockk.*
 import io.mockk.impl.annotations.MockK
 import junit.framework.Assert.assertEquals
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.yield
+import kotlinx.coroutines.test.runBlockingTest
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import reprator.axxess.base.util.AppCoroutineDispatchers
+import reprator.axxess.base.util.useCases.Success
+import reprator.axxess.base_android.SearchModal
 import reprator.axxess.search.domain.usecase.SearchUseCase
+import javax.inject.Inject
 
 class SearchViewModelTest {
 
     @get:Rule
-    private val testCoroutineRule = TestCoroutineRule()
+    val coroutinesTestRule = CoroutinesTestRule()
 
     @get:Rule
-    private val taskExecutorRule = InstantTaskExecutorRule()
+    val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     @MockK
     lateinit var searchUseCase: SearchUseCase
 
-    @MockK
     lateinit var coroutineDispatchers: AppCoroutineDispatchers
 
     @MockK
@@ -46,6 +46,9 @@ class SearchViewModelTest {
     fun setup() {
         MockKAnnotations.init(this)
 
+        coroutineDispatchers = AppCoroutineDispatchersImpl(Dispatchers.Unconfined, Dispatchers.Unconfined,
+            Dispatchers.Unconfined, Dispatchers.Unconfined, Dispatchers.Unconfined);
+
         every { savedStateHandle.get<String>(any()) } returns EMPTY_QUERY
         every { savedStateHandle.set(any(), any<String>()) } returns Unit
 
@@ -59,7 +62,7 @@ class SearchViewModelTest {
 
     @Test
     fun `debounce check for 250ms`() {
-        testCoroutineRule.runBlockingTest {
+        coroutinesTestRule.testDispatcher.runBlockingTest  {
 
             val result = flow {
                 emit(1)
@@ -81,7 +84,7 @@ class SearchViewModelTest {
 
     @Test
     fun `debounce check`() =
-        testCoroutineRule.runBlockingTest {
+        coroutinesTestRule.testDispatcher.runBlockingTest {
             val s = CounterModel()
             launch {
                 val sum = s.counter.take(11).toList().sum()
@@ -105,9 +108,40 @@ class SearchViewModelTest {
             _counter.value++
         }
     }
+    private val observer = mockk<Observer<List<SearchModal>>>(relaxed = true)
 
     @Test
-    fun `debounce `() = testCoroutineRule.runBlockingTest {
+    fun `debounce `() = coroutinesTestRule.testDispatcher.runBlockingTest  {
 
+        // Given
+        val successEmptyResponse = Success(emptyList<SearchModal>())
+
+        every { savedStateHandle.set(any(), any<String>()) } returns Unit
+        coEvery {
+            searchUseCase(QUERY)
+        } returns flow {
+            emit(successEmptyResponse)
+        }
+
+        searchViewModel.searchItemList.observeForever(observer)
+
+
+        //When
+        searchViewModel.setSearchQuery(QUERY)
+
+
+        //Then
+        searchViewModel.searchItemList.observeOnce {
+            Truth.assertThat(it).isEqualTo(successEmptyResponse.data)
+        }
     }
 }
+
+
+class AppCoroutineDispatchersImpl constructor(
+    override val main: CoroutineDispatcher,
+    override val computation: CoroutineDispatcher,
+    override val io: CoroutineDispatcher,
+    override val default: CoroutineDispatcher,
+    override val singleThread: CoroutineDispatcher
+) : AppCoroutineDispatchers

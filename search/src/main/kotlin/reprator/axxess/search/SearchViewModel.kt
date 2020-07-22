@@ -49,12 +49,12 @@ class SearchViewModel @ViewModelInject constructor(
     }
 
     init {
-        initBlock()
+        setListenerForMutableState()
         checkForKilledState()
     }
 
     @VisibleForTesting
-    fun initBlock() {
+    fun setListenerForMutableState() {
         viewModelScope.launch {
             searchQuery.debounce(DEBOUNCE_TIME)
                 .collectLatest { query ->
@@ -62,23 +62,7 @@ class SearchViewModel @ViewModelInject constructor(
                     if (query.isBlank())
                         return@collectLatest
 
-                    val job = launch {
-                        _showLoader.value = true
-                        searchUseCase(query)
-                            .flowOn(coroutineDispatchers.io)
-                            .catch {
-                                _isError.value = Event(it.message!!)
-                            }
-                            .collectLatest {
-                                when (it) {
-                                    is Success ->
-                                        _searchItemList.value = it.data
-                                    is ErrorResult -> {
-                                        _isError.value = Event(it.message!!)
-                                    }
-                                }
-                            }
-                    }
+                    val job = searchServer(query)
                     job.invokeOnCompletion {
                         _showLoader.value = false
                     }
@@ -92,6 +76,26 @@ class SearchViewModel @ViewModelInject constructor(
             setSearchQuery(it)
         }
     }
+
+    @VisibleForTesting
+    fun searchServer(query: String) =
+        viewModelScope.launch {
+            _showLoader.value = true
+            searchUseCase(query)
+                .flowOn(coroutineDispatchers.io)
+                .catch {
+                    _isError.value = Event(it.message!!)
+                }
+                .collectLatest {
+                    when (it) {
+                        is Success ->
+                            _searchItemList.value = it.data
+                        is ErrorResult -> {
+                            _isError.value = Event(it.message!!)
+                        }
+                    }
+                }
+        }
 
     companion object {
         private const val KEY_SEARCH = "itemSearching"
