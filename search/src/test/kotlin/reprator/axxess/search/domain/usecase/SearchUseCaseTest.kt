@@ -5,7 +5,6 @@ import com.google.common.truth.Truth
 import io.mockk.MockKAnnotations
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
-import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.flow.*
 import org.junit.After

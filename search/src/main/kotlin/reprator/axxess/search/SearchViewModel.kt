@@ -1,6 +1,6 @@
 package reprator.axxess.search
 
-import android.util.Log
+import androidx.annotation.VisibleForTesting
 import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
@@ -10,7 +10,6 @@ import reprator.axxess.base.util.AppCoroutineDispatchers
 import reprator.axxess.base.util.useCases.ErrorResult
 import reprator.axxess.base.util.useCases.Success
 import reprator.axxess.base_android.SearchModal
-import reprator.axxess.base_android.SearchNavigator
 import reprator.axxess.base_android.util.event.Event
 import reprator.axxess.search.domain.usecase.SearchUseCase
 
@@ -50,6 +49,12 @@ class SearchViewModel @ViewModelInject constructor(
     }
 
     init {
+        initBlock()
+        checkForKilledState()
+    }
+
+    @VisibleForTesting
+    fun initBlock() {
         viewModelScope.launch {
             searchQuery.debounce(DEBOUNCE_TIME)
                 .collectLatest { query ->
@@ -80,14 +85,12 @@ class SearchViewModel @ViewModelInject constructor(
                     job.join()
                 }
         }
-
-        checkForKilledState()
     }
 
-    private fun checkForKilledState(){
-         savedStateHandle.get<String>(KEY_SEARCH)?.let {
-             setSearchQuery(it)
-         }
+    private fun checkForKilledState() {
+        savedStateHandle.get<String>(KEY_SEARCH)?.let {
+            setSearchQuery(it)
+        }
     }
 
     companion object {

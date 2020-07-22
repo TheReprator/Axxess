@@ -106,4 +106,6 @@ dependencies {
     testImplementation(Libs.TestDependencies.Mockk.unitTest)
     testImplementation(Libs.TestDependencies.truth)
     testImplementation(Libs.TestDependencies.archCore)
+
+    testImplementation(Libs.TestDependencies.junit)
 }
