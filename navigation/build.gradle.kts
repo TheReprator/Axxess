@@ -51,6 +51,10 @@ android {
         unitTests.isReturnDefaultValues = true
         unitTests.isIncludeAndroidResources = true
     }
+
+     packagingOptions {
+         pickFirst ("META-INF/*")
+    }
 }
 
 dependencies {

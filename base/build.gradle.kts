@@ -10,6 +10,7 @@ java {
     sourceSets {
         map { it.java.srcDirs("src/${it.name}/kotlin")}
     }
+
 }
 
 dependencies {

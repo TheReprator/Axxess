@@ -63,6 +63,11 @@ android {
         unitTests.isReturnDefaultValues = true
         unitTests.isIncludeAndroidResources = true
     }
+
+    packagingOptions {
+        pickFirst ("META-INF/*")
+    }
+
 }
 
 androidExtensions {
@@ -78,7 +83,6 @@ dependencies {
 
     implementation(Libs.AndroidX.appcompat)
 
-    implementation(Libs.Google.materialWidget)
     implementation(Libs.AndroidX.annotation)
     implementation(Libs.AndroidX.coreKtx)
     implementation(Libs.AndroidX.constraintlayout)

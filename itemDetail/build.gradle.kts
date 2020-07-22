@@ -50,7 +50,9 @@ android {
         }
     }
 
-    packagingOptions.exclude("META-INF/main.kotlin_module")
+    packagingOptions {
+        pickFirst ("META-INF/*")
+    }
 }
 
 androidExtensions {
@@ -71,7 +73,6 @@ dependencies {
     implementation(project(AppModules.moduleBase))
     implementation(project(AppModules.moduleBaseAndroid))
 
-    implementation(Libs.Google.materialWidget)
     implementation(Libs.AndroidX.annotation)
     implementation(Libs.AndroidX.recyclerview)
     implementation(Libs.AndroidX.cardView)

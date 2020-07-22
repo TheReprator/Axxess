@@ -42,6 +42,10 @@ android {
     }
 
     buildFeatures.dataBinding = true
+
+    packagingOptions {
+        pickFirst ("META-INF/*")
+    }
 }
 
 androidExtensions {
@@ -53,9 +57,9 @@ dependencies {
 
     implementation(Libs.AndroidX.Fragment.fragment)
     implementation(Libs.AndroidX.coreKtx)
+    implementation(Libs.Google.materialWidget)
 
     implementation(Libs.Coil.coil)
-    implementation(Libs.Google.materialWidget)
 
     implementation(Libs.AndroidX.recyclerview)
 }
