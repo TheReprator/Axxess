@@ -18,7 +18,6 @@ import reprator.axxess.base.util.AppCoroutineDispatchers
 import reprator.axxess.base.util.useCases.Success
 import reprator.axxess.base_android.SearchModal
 import reprator.axxess.search.domain.usecase.SearchUseCase
-import javax.inject.Inject
 
 class SearchViewModelTest {
 
@@ -38,6 +37,9 @@ class SearchViewModelTest {
 
     lateinit var searchViewModel: SearchViewModel
 
+    private val observerSuccessList = mockk<Observer<List<SearchModal>>>(relaxed = true)
+    private val observerLoader = mockk<Observer<Boolean>>(relaxed = true)
+
     private val QUERY = "apple"
 
     private val EMPTY_QUERY: String = ""
@@ -46,13 +48,19 @@ class SearchViewModelTest {
     fun setup() {
         MockKAnnotations.init(this)
 
-        coroutineDispatchers = AppCoroutineDispatchersImpl(Dispatchers.Unconfined, Dispatchers.Unconfined,
-            Dispatchers.Unconfined, Dispatchers.Unconfined, Dispatchers.Unconfined);
+        coroutineDispatchers = AppCoroutineDispatchersImpl(
+            Dispatchers.Unconfined, Dispatchers.Unconfined,
+            Dispatchers.Unconfined, Dispatchers.Unconfined, Dispatchers.Unconfined
+        )
 
         every { savedStateHandle.get<String>(any()) } returns EMPTY_QUERY
         every { savedStateHandle.set(any(), any<String>()) } returns Unit
 
-        searchViewModel = SearchViewModel(searchUseCase, coroutineDispatchers, savedStateHandle)
+        searchViewModel =
+            SearchViewModel(searchUseCase, coroutineDispatchers, savedStateHandle).apply {
+                searchItemList.observeForever(observerSuccessList)
+                showLoader.observeForever(observerLoader)
+            }
     }
 
     @After
@@ -61,24 +69,83 @@ class SearchViewModelTest {
     }
 
     @Test
+    fun `fetch updated response from server, if multiple input is send within 250ms`() =
+        coroutinesTestRule.testDispatcher.runBlockingTest {
+
+            // Given
+            val searchModalList1 = emptyList<SearchModal>()
+            val searchModalList2 = listOf(
+                SearchModal("1", "apple", "img1")
+            )
+            val searchModalList3 = listOf(
+                SearchModal("11", "orange", "img1"),
+                SearchModal("222", "Mausami", "img2")
+            )
+
+            val successResponse1 = Success(searchModalList1)
+            val successResponse2 = Success(searchModalList2)
+            val successResponse3 = Success(searchModalList3)
+
+            coEvery {
+                searchUseCase("vikram")
+            } returns flow {
+                emit(successResponse1)
+            }
+
+            coEvery {
+                searchUseCase("apple")
+            } returns flow {
+                emit(successResponse2)
+            }
+
+            coEvery {
+                searchUseCase("orange")
+            } returns flow {
+                emit(successResponse3)
+            }
+
+            searchViewModel.setSearchQuery("vikram")
+            searchViewModel.setSearchQuery("apple")
+            searchViewModel.setSearchQuery("orange")
+
+            searchViewModel.searchItemList.observeOnce {
+                Truth.assertThat(it).isEqualTo(searchModalList3)
+            }
+        }
+
+    @Test
     fun `debounce check for 250ms`() {
-        coroutinesTestRule.testDispatcher.runBlockingTest  {
+        coroutinesTestRule.testDispatcher.runBlockingTest {
 
-            val result = flow {
-                emit(1)
-                delay(300)
-                emit(2)
-                delay(100)
-                emit(3)
-                delay(200)
-                emit(4)
-                delay(240)
-                emit(5)
-                delay(300)
-                emit(6)
-            }.debounce(250).toList()
+            /* val result = flow {
+                 emit(1)
+                 delay(300)
+                 emit(2)
+                 delay(100)
+                 emit(3)
+                 delay(200)
+                 emit(4)
+                 delay(240)
+                 emit(5)
+                 delay(300)
+                 emit(6)
+             }.debounce(250).toList()
 
-            Truth.assertThat(result).isEqualTo(listOf(1, 5, 6))
+             Truth.assertThat(result).isEqualTo(listOf(1, 5, 6))*/
+
+            val flow = flow {
+                emit("A")
+                delay(1500)
+                emit("B")
+                delay(500)
+                emit("C")
+                delay(250)
+                emit("D")
+                delay(2000)
+                emit("E")
+            }
+            val result = flow.debounce(1000).toList()
+            assertEquals(listOf("A", "D", "E"), result)
         }
     }
 
@@ -108,35 +175,98 @@ class SearchViewModelTest {
             _counter.value++
         }
     }
-    private val observer = mockk<Observer<List<SearchModal>>>(relaxed = true)
 
     @Test
-    fun `debounce `() = coroutinesTestRule.testDispatcher.runBlockingTest  {
+    fun `steps for sucessful query fetch`() =
+        coroutinesTestRule.testDispatcher.runBlockingTest {
 
-        // Given
-        val successEmptyResponse = Success(emptyList<SearchModal>())
+            // Given
+            val searchModalList = listOf(
+                SearchModal("1", "apple", "img1"),
+                SearchModal("2", "pine apple", "img2")
+            )
 
-        every { savedStateHandle.set(any(), any<String>()) } returns Unit
-        coEvery {
+            val successResponse = Success(searchModalList)
+
+            coEvery {
+                searchUseCase(QUERY)
+            } returns flow {
+                emit(successResponse)
+            }
+
+            //When
+            searchViewModel.setSearchQuery(QUERY)
+
+            //Then
+            verifySequence {
+                savedStateHandle.get<String>(any())
+                savedStateHandle.set(any(), any<String>())
+                savedStateHandle.set(any(), any<String>())
+            }
+
+            //When
+            searchViewModel.searchServer(QUERY)
+
+            //Then
+            verify(ordering = Ordering.ORDERED) {
+                observerLoader.onChanged(any())
+                observerSuccessList.onChanged(any())
+            }
+        }
+
+    @Test
+    fun `get List for query apple`() =
+        coroutinesTestRule.testDispatcher.runBlockingTest {
+
+            // Given
+            val searchModalList = listOf(
+                SearchModal("1", "apple", "img1"),
+                SearchModal("2", "pine apple", "img2")
+            )
+
+            val successResponse = Success(searchModalList)
+
+            coEvery {
+                searchUseCase(QUERY)
+            } returns flow {
+                emit(successResponse)
+            }
+
+            //When
+            searchViewModel.setSearchQuery(QUERY)
+
+            searchViewModel.searchItemList.observeOnce {
+                Truth.assertThat(it).isEqualTo(searchModalList)
+            }
+        }
+
+    @Test
+    fun `no data found for query with empty data`() =
+        coroutinesTestRule.testDispatcher.runBlockingTest {
+
+            // Given
+            val successEmptyResponse = Success(emptyList<SearchModal>())
+
+            coEvery {
+                searchUseCase(QUERY)
+            } returns flow {
+                emit(successEmptyResponse)
+            }
+
+            //When
+            searchViewModel.setSearchQuery(QUERY)
             searchUseCase(QUERY)
-        } returns flow {
-            emit(successEmptyResponse)
+
+            //Then
+            coVerify(exactly = 1) {
+                searchUseCase(any())
+            }
+
+            searchViewModel.searchItemList.observeOnce {
+                Truth.assertThat(it).isEqualTo(successEmptyResponse.data)
+            }
         }
-
-        searchViewModel.searchItemList.observeForever(observer)
-
-
-        //When
-        searchViewModel.setSearchQuery(QUERY)
-
-
-        //Then
-        searchViewModel.searchItemList.observeOnce {
-            Truth.assertThat(it).isEqualTo(successEmptyResponse.data)
-        }
-    }
 }
-
 
 class AppCoroutineDispatchersImpl constructor(
     override val main: CoroutineDispatcher,

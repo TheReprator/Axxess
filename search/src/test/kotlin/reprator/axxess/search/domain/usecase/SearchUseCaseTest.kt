@@ -7,6 +7,7 @@ import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.test.runBlockingTest
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -14,7 +15,7 @@ import org.junit.Test
 import reprator.axxess.base.util.useCases.ErrorResult
 import reprator.axxess.base.util.useCases.Success
 import reprator.axxess.base_android.SearchModal
-import reprator.axxess.search.TestCoroutineRule
+import reprator.axxess.search.CoroutinesTestRule
 import reprator.axxess.search.domain.repository.SearchRepository
 
 class SearchUseCaseTest {
@@ -26,10 +27,10 @@ class SearchUseCaseTest {
     lateinit var searchUseCase: SearchUseCase
 
     @get:Rule
-    val testCoroutineRule = TestCoroutineRule()
+    val coroutinesTestRule = CoroutinesTestRule()
 
     @get:Rule
-    val taskExecutorRule = InstantTaskExecutorRule()
+    val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     @Before
     fun setup() {
@@ -43,7 +44,7 @@ class SearchUseCaseTest {
 
     @Test
     fun `no value emitted`() {
-        testCoroutineRule.runBlockingTest {
+        coroutinesTestRule.testDispatcher.runBlockingTest {
 
             val successResponse = Success(emptyList<SearchModal>())
 
@@ -62,7 +63,7 @@ class SearchUseCaseTest {
 
     @Test
     fun `No data found for the query`() {
-        testCoroutineRule.runBlockingTest {
+        coroutinesTestRule.testDispatcher.runBlockingTest {
 
             val emptyResponse = Success(emptyList<SearchModal>())
 
@@ -84,7 +85,7 @@ class SearchUseCaseTest {
 
     @Test
     fun `Error thrown due to any Reason`() {
-        testCoroutineRule.runBlockingTest {
+        coroutinesTestRule.testDispatcher.runBlockingTest {
 
             val errorResponse = ErrorResult(message = "No Internet Connection")
 
@@ -109,7 +110,7 @@ class SearchUseCaseTest {
 
     @Test
     fun `get list of success data`() {
-        testCoroutineRule.runBlockingTest {
+        coroutinesTestRule.testDispatcher.runBlockingTest {
 
             val successResponse = Success(
                 listOf(
@@ -135,7 +136,7 @@ class SearchUseCaseTest {
 
     @Test
     fun `get list of success data comparison`() {
-        testCoroutineRule.runBlockingTest {
+        coroutinesTestRule.testDispatcher.runBlockingTest {
 
             val searchModalList = listOf(
                 SearchModal("1", "apple", "appleUrl"),
@@ -160,7 +161,7 @@ class SearchUseCaseTest {
 
     @Test
     fun `get list of success data from respositories`() {
-        testCoroutineRule.runBlockingTest {
+        coroutinesTestRule.testDispatcher.runBlockingTest {
 
             val searchModalList = listOf(
                 SearchModal("1", "apple", "appleUrl"),

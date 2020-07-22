@@ -54,7 +54,7 @@ class SearchViewModel @ViewModelInject constructor(
     }
 
     @VisibleForTesting
-    fun setListenerForMutableState() {
+    private fun setListenerForMutableState() {
         viewModelScope.launch {
             searchQuery.debounce(DEBOUNCE_TIME)
                 .collectLatest { query ->
@@ -78,7 +78,7 @@ class SearchViewModel @ViewModelInject constructor(
     }
 
     @VisibleForTesting
-    fun searchServer(query: String) =
+    suspend fun searchServer(query: String) =
         viewModelScope.launch {
             _showLoader.value = true
             searchUseCase(query)
